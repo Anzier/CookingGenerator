@@ -1,0 +1,122 @@
+from random import randint
+import scrape
+#LIST OF POSSIBLE INGREDIENTS
+ingreds = ['eggs','flour','cheese','vanilla','broccoli','grapes','sugar','salt', 'baking powder','beans','brown rice',
+           'cream','tomatoes','tunafish','ginger','hot sauce','nuts','oats','onions','pasta','peanut butter','potatos',
+           'vegetable oil','coffee','tea','honey','chocolate','pepperoni','milk','yogurt']
+def makeRecipe(ingreds):
+
+#CREATE A 2D LIST HOLDING 1000 ENTRIES OF 10 RANDOMLY SELECTED INGREDIENTS
+    dictionary = {}
+    recipe = []
+    for i in range(0,10000):
+        name = "recipe #" + str(i)
+        new = []
+        for j in range (0,4):
+            #RANDOMLY SELECT AN INGREDIENT IN THE RANGE FROM 0 TO NUMBER OF INGREDIENTS
+            #WHILE THE INGREDIENT PICKED ALREADY EXISTS IN THE RECIPE, PICK AGAIN
+            ingredient = ingreds[randint(0,len(ingreds)-1)]
+            while ingredient in new:
+                ingredient = ingreds[randint(0,len(ingreds)-1)]
+            new.append(ingredient)
+        dictionary[name] = new
+        #recipe.append(new)
+
+   # print(recipe)
+    '''
+    for i in range(0,len(recipe)):
+           print(recipe[i])
+    '''
+    #recipe = [['' for i in range(10)] for j in range(10)]
+    #return recipe
+
+    print(dictionary)
+    return dictionary
+
+#MYRECIPELIST IS THE 2D ARRAY OF RECIPES
+myrecipelist = makeRecipe(ingreds)####
+print("fuckit")
+#print(myrecipelist)
+
+#PANTRY IS A LIST OF OWNED INGREDIENTS
+pantry = []#####
+print("enter whats in your pantry")
+while True:
+    userInput = input()
+    if(userInput is 'q'): break
+    pantry.append(userInput)
+
+print ("\n\nYou have these ingredients:\n")
+print (pantry)
+
+#FOR I IN RECIPELIST MAKES I EQUAL TO EACH TERM AS IT ITERATES
+# FOR I IN RANGE() I BECOMES AN ITERATOR
+
+'''
+containsAll = True
+thingsyoucanmake = []##### CONVERT TO DICTIONARY, 2D LIST WONT WORK
+for i in range (0,len(myrecipelist)):
+
+    containsAll = True
+    for j in range (0, len(myrecipelist[i])):
+     #if any item needed in the recipe is not owned, break
+        if myrecipelist[i][j] not in pantry:
+            containsAll = False
+            break
+    if containsAll is True:
+        thingsyoucanmake.append(myrecipelist[i])
+'''
+
+
+
+missingallowed = 1 # the tolerance for amount of ingredients not present in a needed recipe
+thingsyoucanmake = {}
+
+for key in myrecipelist:
+    ingredsMissing = 0 # total the amount of ingredients needed but not present
+    for j in range (0, len(myrecipelist[key])):
+     #if any item needed in the recipe is not owned, break
+        if myrecipelist[key][j] not in pantry:
+            ingredsMissing += 1
+    if ingredsMissing <= missingallowed: # if only x extra ingredients would be needed, add it in
+        thingsyoucanmake[key] = myrecipelist[key] #add from the recipe dictionary to makeable-recipe dictionary
+        thingsyoucanmake[key].append(ingredsMissing)#add the number missing into the dictionary entry
+
+
+if len(thingsyoucanmake) != 0:
+    print("\nthere are ", len(thingsyoucanmake), "total matches")
+    for n in range (0,missingallowed+1):
+        print("\nwith ", n, " extra items, you could make:\n")
+        for key in thingsyoucanmake:
+             if thingsyoucanmake[key][-1] == n:# if we read in the amount missing, and it matches upper loop
+                print(thingsyoucanmake[key])
+    print('now here is a view of everything')
+    print(thingsyoucanmake)
+else:
+    print('you can\'t make anything with those ingredients')
+
+print("calling web scraper")
+gather = scrape.getdata()
+print('printing gather')
+print(gather)
+##############
+#for index, name in enumerate(wordlist)
+#(for name in wordlist)
+
+
+# location -1 means the last location   loc[-1]
+# loc.pop() takes last one off / loc.append(d) adds one on
+# split() splits on whitespace by default
+#  item.split(',') splits on the comma
+
+#string = string.split()  <- turns A string into an array of split items
+
+#line.split()[0] <- splits and returns the first word
+
+#
+#
+#
+#
+#
+#s href is just an a tag in beautiful soup
+#
